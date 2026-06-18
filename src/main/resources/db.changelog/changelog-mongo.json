@@ -1,0 +1,52 @@
+{
+  "databaseChangeLog": [
+    {
+      "changeSet": {
+        "id": "1",
+        "author": "Vika",
+        "changes": [
+          {
+            "createCollection": {
+              "collectionName": "payments"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "changeSet": {
+        "id": "2",
+        "author": "Vika",
+        "changes": [
+          {
+            "createIndex": {
+              "collectionName": "payments",
+              "keys": {
+                "user_id": 1
+              },
+              "name": "idx_user_id"
+            }
+          },
+          {
+            "createIndex": {
+              "collectionName": "payments",
+              "keys": {
+                "order_id": 1
+              },
+              "name": "idx_order_id"
+            }
+          },
+          {
+            "createIndex": {
+              "collectionName": "payments",
+              "keys": {
+                "status": 1
+              },
+              "name": "idx_status"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
