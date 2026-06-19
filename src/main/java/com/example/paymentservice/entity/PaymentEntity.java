@@ -1,6 +1,7 @@
 package com.example.paymentservice.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -12,13 +13,14 @@ import java.time.Instant;
 @Getter
 @Setter
 @Document(collection = "payments")
+@NoArgsConstructor
 public class PaymentEntity {
 
     @Id
     private String id;
 
     @Field("order_id")
-    private String orderId;
+    private Long orderId;
 
     @Field("user_id")
     private Long userId;
