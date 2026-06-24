@@ -1,3 +1,43 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: payment-service
+
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/payment_db}
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+
 mongock:
   enabled: true
   change-log: classpath:migrations/changelog.json
+
+jwt:
+  secret: ${JWT_SECRET:ZWQ4NzIwODQtNWYyNy00ODhmLThkN2MtNzAzMDc3MTQzYWI5ZjZjMWEwNjEtMTBhYS00ZWY3LTljODItYjAzN2VjY2M5ZDRj}
+
+server:
+  port: 8084
+
+kafka:
+   bootstrap-servers: localhost:9092
+   producer:
+     key-serializer: org.apache.kafka.common.serialization.StringSerializer
+     value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+   consumer:
+     group-id: payment-service-group
+     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+     value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+     properties:
+       spring.json.trusted.packages: "*"
+
+logging:
+  level:
+    root: INFO
+    com.example.paymentservice: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.data.mongodb: DEBUG

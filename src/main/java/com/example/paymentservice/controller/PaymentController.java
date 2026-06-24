@@ -10,6 +10,7 @@
     import org.slf4j.LoggerFactory;
     import org.springframework.http.HttpStatus;
     import org.springframework.http.ResponseEntity;
+    import org.springframework.security.access.prepost.PreAuthorize;
     import org.springframework.web.bind.annotation.*;
 
     import java.math.BigDecimal;
@@ -24,6 +25,7 @@
         private final Logger log = LoggerFactory.getLogger(PaymentController.class);
 
         @PostMapping
+        @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
         public ResponseEntity<PaymentResponse> createPayment(@Valid @RequestBody PaymentRequest paymentRequest) {
             log.info("Creating payment for userId: {}, orderId: {}, amount: {}",
                     paymentRequest.userId(), paymentRequest.orderId(), paymentRequest.paymentAmount());
@@ -31,12 +33,14 @@
         }
 
         @GetMapping("/{id}")
+        @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
         public ResponseEntity<PaymentResponse> getPaymentById(@PathVariable String id) {
             log.info("Getting payment by id: {}", id);
             return ResponseEntity.ok(paymentService.getPaymentById(id));
         }
 
         @GetMapping
+        @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
         public ResponseEntity<List<PaymentResponse>> getPaymentByCriteria(@RequestParam(required = false) Long userId,
                                                                           @RequestParam(required = false) String orderId,
                                                                           @RequestParam(required = false) String status
@@ -51,6 +55,7 @@
         }
 
         @GetMapping("/users/{user_id}/summary")
+        @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
         public ResponseEntity<BigDecimal> getUserSum(@PathVariable("user_id") Long userId,
                                                      @RequestParam Instant start,
                                                      @RequestParam Instant end
@@ -62,6 +67,7 @@
         }
 
         @GetMapping("/summary")
+        @PreAuthorize("hasAnyRole('ADMIN')")
         public ResponseEntity<BigDecimal> getAllUserSum(@RequestParam Instant start,
                                                         @RequestParam Instant end
         ) {
