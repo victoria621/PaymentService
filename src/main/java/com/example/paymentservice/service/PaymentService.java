@@ -3,6 +3,7 @@ package com.example.paymentservice.service;
 import com.example.paymentservice.dto.PaymentRequest;
 import com.example.paymentservice.dto.PaymentResponse;
 import com.example.paymentservice.entity.PaymentEntity;
+import com.example.paymentservice.entity.PaymentStatus;
 import com.example.paymentservice.mapper.PaymentMapper;
 import com.example.paymentservice.repository.CustomPaymentRepository;
 import com.example.paymentservice.repository.PaymentRepository;
@@ -16,6 +17,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.example.paymentservice.entity.PaymentStatus.*;
+
 @Service
 @AllArgsConstructor
 public class PaymentService {
@@ -28,15 +31,15 @@ public class PaymentService {
     public PaymentResponse createPayment(PaymentRequest paymentRequest) {
         PaymentEntity  paymentEntity = paymentMapper.toEntity(paymentRequest);
         paymentEntity.setTimestamp(Instant.now());
-        paymentEntity.setStatus("PENDING");
+        paymentEntity.setStatus(PENDING);
 
         paymentEntity = paymentRepository.save(paymentEntity);
         int randomNumber = fetchRandomNumber();
 
         if(randomNumber % 2 ==0) {
-            paymentEntity.setStatus("SUCCESS");
+            paymentEntity.setStatus(SUCCESS);
         } else{
-            paymentEntity.setStatus("FAILED");
+            paymentEntity.setStatus(FAILED);
         }
 
         paymentEntity = paymentRepository.save(paymentEntity);
@@ -55,7 +58,12 @@ public class PaymentService {
         }
     }
 
-    public List<PaymentResponse> getPaymentsByCriteria(Long userId, String orderId, String status) {
+    public PaymentResponse getPaymentById(String id) {
+        PaymentEntity paymentEntity = paymentRepository.findById(id).orElseThrow(() -> new RuntimeException("Payment not found"));
+        return paymentMapper.toDto(paymentEntity);
+    }
+
+    public List<PaymentResponse> getPaymentsByCriteria(Long userId, String orderId, PaymentStatus status) {
         List<PaymentEntity> paymentEntity = customPaymentRepository.findPaymentsByCriteria(userId, orderId, status);
         return paymentEntity.stream()
                 .map(paymentMapper::toDto)

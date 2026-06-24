@@ -26,7 +26,7 @@ public class PaymentEntity {
     private Long userId;
 
     @Field("status")
-    private String status;
+    private PaymentStatus status;
 
     @Field("timestamp")
     private Instant timestamp;

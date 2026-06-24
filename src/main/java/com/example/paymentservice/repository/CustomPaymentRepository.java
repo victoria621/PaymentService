@@ -2,6 +2,7 @@
 
     import com.example.paymentservice.dto.SumResult;
     import com.example.paymentservice.entity.PaymentEntity;
+    import com.example.paymentservice.entity.PaymentStatus;
     import org.springframework.data.mongodb.core.MongoTemplate;
     import org.springframework.data.mongodb.core.aggregation.Aggregation;
     import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
@@ -24,7 +25,7 @@
             this.mongoTemplate = mongoTemplate;
         }
 
-        public List<PaymentEntity> findPaymentsByCriteria(Long userId, String orderId, String status){
+        public List<PaymentEntity> findPaymentsByCriteria(Long userId, String orderId, PaymentStatus status){
             Query query = new Query();
             List<Criteria> criteriaList = new ArrayList<>();
 
@@ -34,7 +35,7 @@
             if(orderId != null){
                 criteriaList.add(Criteria.where("orderId").is(orderId));
             }
-            if(status != null && !status.isEmpty()){
+            if(status != null ){
                 criteriaList.add(Criteria.where("status").is(status));
             }
 

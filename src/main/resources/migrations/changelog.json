@@ -1,9 +1,9 @@
 {
-  "databaseChangeLog": [
+  "changeLog": [
     {
       "changeSet": {
         "id": "1",
-        "author": "Vika",
+        "author": "your_name",
         "changes": [
           {
             "createCollection": {
@@ -16,7 +16,7 @@
     {
       "changeSet": {
         "id": "2",
-        "author": "Vika",
+        "author": "your_name",
         "changes": [
           {
             "createIndex": {

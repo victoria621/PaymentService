@@ -1,3 +1,3 @@
-spring:
-  application:
-    name: PaymentService
+mongock:
+  enabled: true
+  change-log: classpath:migrations/changelog.json
