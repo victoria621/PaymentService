@@ -1,5 +1,6 @@
 package com.example.paymentservice.service;
 
+import com.example.paymentservice.dto.PaymentEvent;
 import com.example.paymentservice.dto.PaymentRequest;
 import com.example.paymentservice.dto.PaymentResponse;
 import com.example.paymentservice.entity.PaymentEntity;
@@ -26,6 +27,7 @@ public class PaymentService {
     private final PaymentMapper paymentMapper;
     private final RestTemplate restTemplate;
     private final CustomPaymentRepository customPaymentRepository;
+    private final KafkaProducerService kafkaProducerService;
 
     @Transactional
     public PaymentResponse createPayment(PaymentRequest paymentRequest) {
@@ -43,6 +45,14 @@ public class PaymentService {
         }
 
         paymentEntity = paymentRepository.save(paymentEntity);
+
+        PaymentEvent event = new PaymentEvent();
+        event.setId(paymentEntity.getId());
+        event.setOrderId(paymentEntity.getOrderId());
+        event.setStatus(paymentEntity.getStatus());
+        event.setTimestamp(paymentEntity.getTimestamp());
+        kafkaProducerService.sendPaymentEvent(event);
+
         return paymentMapper.toDto(paymentEntity);
 
     }
