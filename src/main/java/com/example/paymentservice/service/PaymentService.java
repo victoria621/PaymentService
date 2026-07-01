@@ -9,6 +9,7 @@ import com.example.paymentservice.mapper.PaymentMapper;
 import com.example.paymentservice.repository.CustomPaymentRepository;
 import com.example.paymentservice.repository.PaymentRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -38,7 +39,7 @@ public class PaymentService {
         paymentEntity = paymentRepository.save(paymentEntity);
         int randomNumber = fetchRandomNumber();
 
-        if(randomNumber % 2 ==0) {
+        if(randomNumber % 2 == 0) {
             paymentEntity.setStatus(SUCCESS);
         } else{
             paymentEntity.setStatus(FAILED);
@@ -73,7 +74,7 @@ public class PaymentService {
         return paymentMapper.toDto(paymentEntity);
     }
 
-    public List<PaymentResponse> getPaymentsByCriteria(Long userId, String orderId, PaymentStatus status) {
+    public List<PaymentResponse> getPaymentsByCriteria(Long userId, Long orderId, PaymentStatus status) {
         List<PaymentEntity> paymentEntity = customPaymentRepository.findPaymentsByCriteria(userId, orderId, status);
         return paymentEntity.stream()
                 .map(paymentMapper::toDto)

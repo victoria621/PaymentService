@@ -36,13 +36,18 @@
         @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
         public ResponseEntity<PaymentResponse> getPaymentById(@PathVariable String id) {
             log.info("Getting payment by id: {}", id);
-            return ResponseEntity.ok(paymentService.getPaymentById(id));
+            try {
+                PaymentResponse response = paymentService.getPaymentById(id);
+                return ResponseEntity.ok(response);
+            } catch (RuntimeException e) {
+                return ResponseEntity.notFound().build();
+            }
         }
 
         @GetMapping
         @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
         public ResponseEntity<List<PaymentResponse>> getPaymentByCriteria(@RequestParam(required = false) Long userId,
-                                                                          @RequestParam(required = false) String orderId,
+                                                                          @RequestParam(required = false) Long orderId,
                                                                           @RequestParam(required = false) String status
         ) {
             log.info("Getting payments by criteria: userId={}, orderId={}, status={}", userId, orderId, status);

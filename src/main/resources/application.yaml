@@ -12,6 +12,19 @@ spring:
     oauth2:
       resourceserver:
         jwt:
+          secret: ${JWT_SECRET:ZWQ4NzIwODQtNWYyNy00ODhmLThkN2MtNzAzMDc3MTQzYWI5ZjZjMWEwNjEtMTBhYS00ZWY3LTljODItYjAzN2VjY2M5ZDRj}
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: payment-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
 
 mongock:
   enabled: true
@@ -22,18 +35,6 @@ jwt:
 
 server:
   port: 8084
-
-kafka:
-   bootstrap-servers: localhost:9092
-   producer:
-     key-serializer: org.apache.kafka.common.serialization.StringSerializer
-     value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-   consumer:
-     group-id: payment-service-group
-     key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-     value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-     properties:
-       spring.json.trusted.packages: "*"
 
 logging:
   level:

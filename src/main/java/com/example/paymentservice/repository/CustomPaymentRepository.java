@@ -25,7 +25,7 @@
             this.mongoTemplate = mongoTemplate;
         }
 
-        public List<PaymentEntity> findPaymentsByCriteria(Long userId, String orderId, PaymentStatus status){
+        public List<PaymentEntity> findPaymentsByCriteria(Long userId, Long orderId, PaymentStatus status){
             Query query = new Query();
             List<Criteria> criteriaList = new ArrayList<>();
 
